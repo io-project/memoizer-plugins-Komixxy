@@ -2,6 +2,7 @@ package pl.edu.uj.tcs.memoizer.plugins.impl.komixxy;
 
 import pl.edu.uj.tcs.memoizer.plugins.*;
 import pl.edu.uj.tcs.memoizer.plugins.impl.*;
+import pl.edu.uj.tcs.memoizer.serialization.StateObject;
 
 import java.net.*;
 import java.util.*;
@@ -13,7 +14,7 @@ import java.awt.Image;
  * @author pmikos (sokar92)
  */
 public final class KomixxyDownloadPlugin implements IDownloadPlugin {
-	private Map<String, byte[]> _state;
+	private StateObject _state;
 	private EViewType _view;
 	private Map<EViewType, IMemeBuffer> _viewBuffer;
 	
@@ -21,7 +22,7 @@ public final class KomixxyDownloadPlugin implements IDownloadPlugin {
 	 * Instantiates new download plugin designed
 	 * for "www.komixxy.pl" page
 	 */
-	public KomixxyDownloadPlugin(Map<String, byte[]> state){		
+	public KomixxyDownloadPlugin(StateObject state){		
 		_state = state;
 		_view = null;
 		
@@ -33,7 +34,7 @@ public final class KomixxyDownloadPlugin implements IDownloadPlugin {
 	}
 	
 	@Override
-	public Map<String, byte[]> getState(){
+	public StateObject getState(){
 		return _state;
 	}
 

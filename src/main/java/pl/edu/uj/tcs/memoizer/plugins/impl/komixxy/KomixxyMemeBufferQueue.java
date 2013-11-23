@@ -5,12 +5,13 @@ import java.util.Map;
 import pl.edu.uj.tcs.memoizer.plugins.EViewType;
 import pl.edu.uj.tcs.memoizer.plugins.Meme;
 import pl.edu.uj.tcs.memoizer.plugins.impl.MemeBuffer;
+import pl.edu.uj.tcs.memoizer.serialization.StateObject;
 
 public class KomixxyMemeBufferQueue extends MemeBuffer {
 	
 	private static EViewType viewType = EViewType.QUEUE;
 
-	public KomixxyMemeBufferQueue(Map<String, byte[]> state){
+	public KomixxyMemeBufferQueue(StateObject state){
 		super(state);
 	}
 	

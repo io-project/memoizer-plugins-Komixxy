@@ -2,6 +2,7 @@ package pl.edu.uj.tcs.memoizer.plugins.impl.komixxy;
 
 import pl.edu.uj.tcs.memoizer.plugins.IPlugin;
 import pl.edu.uj.tcs.memoizer.plugins.IPluginFactory;
+import pl.edu.uj.tcs.memoizer.serialization.StateObject;
 import java.awt.Image;
 import java.util.Map;
 
@@ -19,8 +20,8 @@ public class KomixxyDownloadPluginFactory implements IPluginFactory {
 		return null;
 	}
 	
-	public IPlugin newInstance(Map<String, byte[]> pluginStateMap){
-		return new KomixxyDownloadPlugin(pluginStateMap);
+	public IPlugin newInstance(StateObject pluginState){
+		return new KomixxyDownloadPlugin(pluginState);
 	}
 	
 }
