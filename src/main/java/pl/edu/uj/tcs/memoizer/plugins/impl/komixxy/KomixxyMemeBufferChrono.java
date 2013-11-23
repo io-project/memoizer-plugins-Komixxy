@@ -16,9 +16,8 @@ public class KomixxyMemeBufferChrono extends MemeBuffer {
 	
 	@Override
 	protected Iterable<Meme> downloadMemes(){
-		return null;
-		/*DemotyDownloader.downloadMemesFromPage(
-				DemotyUrlFactory.getMainPageUrl(1),
-				viewType);*/
+		return KomixxyDownloader.downloadMemesFromPage(
+				KomixxyUrlFactory.getMainPageUrl(1),
+				viewType);
 	}
 }

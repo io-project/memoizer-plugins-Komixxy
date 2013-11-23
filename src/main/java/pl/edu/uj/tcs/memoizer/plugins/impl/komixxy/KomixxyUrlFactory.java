@@ -19,4 +19,16 @@ class KomixxyUrlFactory {
 	static String getTopByPercentPageUrl(int pageNum){
 		return _workingUrl + "/topka/procenty/page/" + pageNum;
 	}
+	
+	static String getTopByPointsPageUrl(int pageNum){
+		return _workingUrl + "/topka/punkty/page/" + pageNum;
+	}
+	
+	static String getTopByCommentsPageUrl(int pageNum){
+		return _workingUrl + "/topka/komentarze/page/" + pageNum;
+	}
+	
+	static String getTopByVotesPageUrl(int pageNum){
+		return _workingUrl + "/topka/glosy/page/" + pageNum;
+	}
 }

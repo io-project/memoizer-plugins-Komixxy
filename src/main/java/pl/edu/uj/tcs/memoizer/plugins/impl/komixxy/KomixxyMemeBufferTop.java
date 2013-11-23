@@ -16,9 +16,8 @@ public class KomixxyMemeBufferTop extends MemeBuffer {
 	
 	@Override
 	protected Iterable<Meme> downloadMemes(){
-		return null; 
-		/*DemotyDownloader.downloadMemesFromPage(
-				DemotyUrlFactory.getTopByPercentPageUrl(1),
-				viewType);*/
+		return KomixxyDownloader.downloadMemesFromPage(
+				KomixxyUrlFactory.getTopByPercentPageUrl(1),
+				viewType);
 	}
 }

@@ -52,11 +52,8 @@ class KomixxyDownloader {
 		if(komixxyPageSource == null)
 			return result;
 		
-		Elements demotySection = komixxyPageSource.select("section.demots");
-		for(Element elem : demotySection){
-			Elements demotivators = elem.select("div.demotivator[id]");
-			result.addAll(demotivators);
-		}
+		Elements komixxy = komixxyPageSource.select("div.pic[id*=pic]");
+		result.addAll(komixxy);
 		
 		return result;
 	}
@@ -75,7 +72,7 @@ class KomixxyDownloader {
 				Element picLink = meme.select("a.picwrapper[href]").first();
 				URL pageLink = extractPageLinkFromATag(picLink);
 				
-				Element image = picLink.select("img.demot[src]").first();
+				Element image = picLink.select("img.pic[src]").first();
 				URL imageLink = extractImageLinkFromImgTag(image);
 				String title = extractTitleFromImgTag(image);
 				int width = extractWidthFromImgTag(image);
@@ -112,14 +109,20 @@ class KomixxyDownloader {
 	
 	private static int extractWidthFromImgTag(Element imgTagElement){
 		try{
-			return Integer.parseInt(imgTagElement.attr("width"));
+			String width = imgTagElement.attr("width");
+			if(width.endsWith("px"))
+				width = width.substring(0, width.length()-2);
+			return Integer.parseInt(width);
 		} catch(Exception e){}
 		return 0;
 	}
 	
 	private static int extractHeightFromImgTag(Element imgTagElement){
 		try{
-			return Integer.parseInt(imgTagElement.attr("height"));
+			String height = imgTagElement.attr("height");
+			if(height.endsWith("px"))
+				height = height.substring(0, height.length()-2);
+			return Integer.parseInt(height);
 		} catch(Exception e){}
 		return 0;
 	}
