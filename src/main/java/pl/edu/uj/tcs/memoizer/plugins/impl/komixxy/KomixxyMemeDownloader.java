@@ -15,7 +15,7 @@ import org.jsoup.select.Elements;
  * Plugin submodule designed for downloading 
  * and extracting memes from page sources
  */
-class KomixxyDownloader {
+class KomixxyMemeDownloader {
 	
 	/*
 	 * Get a page source, parse it,
@@ -88,7 +88,7 @@ class KomixxyDownloader {
 	
 	private static URL extractPageLinkFromATag(Element aTagElement){
 		try{
-			return new URL(KomixxyUrlFactory.getBaseUrl() + aTagElement.attr("href"));
+			return new URL("http://www.komixxy.pl" + aTagElement.attr("href"));
 		}catch(Exception e){}
 		return null;
 	}
