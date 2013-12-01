@@ -3,6 +3,7 @@ package pl.edu.uj.tcs.memoizer.plugins.impl.komixxy;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+
 import pl.edu.uj.tcs.memoizer.plugins.*;
 
 import org.jsoup.Jsoup;
@@ -21,7 +22,7 @@ class KomixxyMemeDownloader {
 	 * Get a page source, parse it,
 	 * extract memes and return
 	 */
-	static List<Meme> downloadMemesFromPage(String url, EViewType viewType){
+	static List<Meme> downloadMemesFromPage(URL url, EViewType viewType){
 		return extractMemesFromNodes(
 				extractMemeNodes(
 				downloadPageSource(url)), viewType);
@@ -32,10 +33,10 @@ class KomixxyMemeDownloader {
 	 * If success returns downloaded page
 	 * otherwise returns null
 	 */
-	private static Document downloadPageSource(String url){
+	private static Document downloadPageSource(URL url){
 		try{
 			return Jsoup
-					.connect(url)
+					.connect(url.toString())
 					.userAgent("Mozilla")
 					.get();
 		} catch(IOException e){}
@@ -68,19 +69,41 @@ class KomixxyMemeDownloader {
 		for(Element meme : memeNodes){
 			try{
 				String desc = "";
+				Element pic_image = meme.select("div.pic_image").first();
 				
-				Element picLink = meme.select("a.picwrapper[href]").first();
-				URL pageLink = extractPageLinkFromATag(picLink);
+				Integer picid = null;
+				try{
+					picid = Integer.parseInt(meme.select("input[name=pic_id]").first().attr("value"));
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 				
-				Element image = picLink.select("img.pic[src]").first();
-				URL imageLink = extractImageLinkFromImgTag(image);
-				String title = extractTitleFromImgTag(image);
-				int width = extractWidthFromImgTag(image);
-				int heigth = extractHeightFromImgTag(image);
+				String imageLink = null, title = null, description;
+				
+				Element pic = pic_image.select("img[alt]").first();
+				imageLink = pic.attr("src");
+				
+				String fullTitle = pic.attr("alt");
+				int split = fullTitle.indexOf('–');
+				if(split<0)
+					title = fullTitle;
+				else{
+					title = fullTitle.substring(0, split-1).trim();
+					desc = fullTitle.substring(split+1, fullTitle.length()-1).trim();
+				}
+				
+				URI pageLinkBad = new URI(meme.select("a[href$=comments]").first().attr("href"));//remove #comments from end
+				URI pageLink = new URI(pageLinkBad.getScheme(), pageLinkBad.getHost(), pageLinkBad.getPath(),"");
+				
+				//TODO implement
+				//int width = extractWidthFromImgTag(image);
+				//int heigth = extractHeightFromImgTag(image);
 				
 				if(imageLink != null)
-					lst.add(new Meme(imageLink, pageLink, title, desc, width, heigth, null, viewType, null));
-			} catch(Exception e){}
+					lst.add(new Meme(new URL(imageLink), pageLink.toURL(), title, desc, 0, 0, null, viewType, null));
+			} catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		
 		return lst;
@@ -126,4 +149,5 @@ class KomixxyMemeDownloader {
 		} catch(Exception e){}
 		return 0;
 	}
+
 }
