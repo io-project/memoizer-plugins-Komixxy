@@ -100,7 +100,7 @@ class KomixxyMemeDownloader {
 				//int heigth = extractHeightFromImgTag(image);
 				
 				if(imageLink != null){
-					Meme newMeme = new Meme(new URL(imageLink), pageLink.toURL(), title, description, 0, 0, null, viewType, pluginFactory);
+					Meme newMeme = new Meme(new URL(imageLink), pageLink.toURL(), title, description, 0, 0, null, pluginFactory);
 					newMeme.setId(idInput);
 					lst.add(newMeme);
 				}
