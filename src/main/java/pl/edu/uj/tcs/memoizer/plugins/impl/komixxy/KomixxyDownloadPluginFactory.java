@@ -133,7 +133,7 @@ public class KomixxyDownloadPluginFactory implements IPluginFactory {
 			case SEARCH:
 				String searchKey = (String)parameters;
 				try {
-					String url = "http://komixxy.pl/szukaj?q=" + URLEncoder.encode(searchKey, "UTF-8");
+					String url = "http://komixxy.pl/szukaj/page/?q=" + URLEncoder.encode(searchKey, "UTF-8");
 					URI uri = new URI(url);
 					return new KomixxySequentialDownloader("DemotywatorySearch", state, viewType, uri, this);
 				} catch (UnsupportedEncodingException | URISyntaxException e) {

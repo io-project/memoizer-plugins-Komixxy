@@ -22,10 +22,10 @@ class KomixxyMemeDownloader {
 	 * Get a page source, parse it,
 	 * extract memes and return
 	 */
-	static List<Meme> downloadMemesFromPage(URL url, EViewType viewType){
+	static List<Meme> downloadMemesFromPage(URL url, EViewType viewType, IPluginFactory pluginFactory){
 		return extractMemesFromNodes(
 				extractMemeNodes(
-				downloadPageSource(url)), viewType);
+				downloadPageSource(url)), viewType, pluginFactory);
 	}
 	
 	/*
@@ -63,7 +63,7 @@ class KomixxyMemeDownloader {
 	 * Parse html meme-linked element and extract meme info
 	 * returns list of parsed memes
 	 */
-	private static List<Meme> extractMemesFromNodes(Elements memeNodes, EViewType viewType){
+	private static List<Meme> extractMemesFromNodes(Elements memeNodes, EViewType viewType, IPluginFactory pluginFactory){
 		List<Meme> lst = new ArrayList<Meme>();
 		
 		for(Element meme : memeNodes){
@@ -71,14 +71,10 @@ class KomixxyMemeDownloader {
 				String desc = "";
 				Element pic_image = meme.select("div.pic_image").first();
 				
-				Integer picid = null;
-				try{
-					picid = Integer.parseInt(meme.select("input[name=pic_id]").first().attr("value"));
-				}catch(Exception e){
-					e.printStackTrace();
-				}
+				//<input type="hidden" class="pic_id" name="pic_id" value="4247512"/>
+				Integer idInput = Integer.parseInt(meme.select("input[name=pic_id]").first().attr("value"));
 				
-				String imageLink = null, title = null, description;
+				String imageLink = null, title = null, description = null;
 				
 				Element pic = pic_image.select("img[alt]").first();
 				imageLink = pic.attr("src");
@@ -87,9 +83,13 @@ class KomixxyMemeDownloader {
 				int split = fullTitle.indexOf('–');
 				if(split<0)
 					title = fullTitle;
+				else if(split==0)
+					title = fullTitle.substring(1, fullTitle.length()-1).trim();
+				else if(split==fullTitle.length()-1)
+					title = fullTitle.substring(0, fullTitle.length()-2).trim();
 				else{
 					title = fullTitle.substring(0, split-1).trim();
-					desc = fullTitle.substring(split+1, fullTitle.length()-1).trim();
+					description = fullTitle.substring(split+1, fullTitle.length()-1).trim();
 				}
 				
 				URI pageLinkBad = new URI(meme.select("a[href$=comments]").first().attr("href"));//remove #comments from end
@@ -99,8 +99,11 @@ class KomixxyMemeDownloader {
 				//int width = extractWidthFromImgTag(image);
 				//int heigth = extractHeightFromImgTag(image);
 				
-				if(imageLink != null)
-					lst.add(new Meme(new URL(imageLink), pageLink.toURL(), title, desc, 0, 0, null, viewType, null));
+				if(imageLink != null){
+					Meme newMeme = new Meme(new URL(imageLink), pageLink.toURL(), title, description, 0, 0, null, viewType, pluginFactory);
+					newMeme.setId(idInput);
+					lst.add(newMeme);
+				}
 			} catch(Exception e){
 				e.printStackTrace();
 			}
